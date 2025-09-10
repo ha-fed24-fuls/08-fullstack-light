@@ -1,35 +1,38 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import type { Movie } from './data/types';
 
-function App() {
-  const [count, setCount] = useState(0)
+type EventCallback = () => void;
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+const App = () => {
+	const [movies, setMovies] = useState<null | Movie[]>(null)
+
+	const handleInspireClick: EventCallback = async () => {
+		// OBS! Vi skriver URL på ett annat sätt - senare
+		// Felhantering: try/catch, kontrollera statuskod
+		const response: Response = await fetch('http://localhost:1337/movies', {
+			method: 'GET'
+		})
+		if( response.status !== 200 ) {
+			console.log('Fel statuskod från server: ', response.status)
+			return
+		}
+		const data = await response.json()
+		// TODO: validera att vi får korrekt data (lista med Movie objekt)
+		setMovies(data)
+	}
+
+	return (
+		<div className="app">
+			<h1> Watch some bad movies!! </h1>
+			<button onClick={handleInspireClick}> Inspire me! </button>
+			<div className="movies">
+				{movies && movies.map(movie => (
+					<p key={movie.id}> {movie.title} - {movie.premiere} </p>
+				))}
+			</div>
+		</div>
+	)
 }
 
 export default App
