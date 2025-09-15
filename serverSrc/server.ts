@@ -34,7 +34,7 @@ interface IdParam {
 app.delete('/api/movies/:id', (req: Request<IdParam>, res: Response<void>) => {
 	const id: string = req.params.id
 	const index: number = badMovies.findIndex(movie => movie.id === id)
-	
+
 	if( index === -1 ) {
 		res.sendStatus(404)
 		return
@@ -71,6 +71,16 @@ app.get("/movies/:id", (
     });
   }
 );
+
+
+app.put('/api/movies/:id', (req: Request<IdParam>, res: Response<void>) => {
+  // 1. validera id
+  // 2. validera body
+  // 3. matchar id något movie-objekt?
+  // 4. genomför ändringen
+  // TODO: försök implementera funktionen!
+})
+
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}...`);
