@@ -4,3 +4,7 @@ export interface Movie {
   premiere: number;
   // imgUrl: string;
 }
+export interface MovieWithoutId {
+  title: string;
+  premiere: number;
+}
